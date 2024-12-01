@@ -1,0 +1,120 @@
+# Intervua - AI-Powered Interview Management Platform
+
+## Project Overview
+Automated interviewing app designed for journalists and content creators to streamline the interview process with AI-driven suggestions, outreach automation, and interview management.
+
+## Goals
+- **Business Goal**: Establish Intervua as the leading tool for automating journalist workflows.
+- **User Goal**: Enable journalists to conduct interviews effectively, boosting response rates and content quality.
+
+### Non-Goals
+- Full SEO analysis or keyword research beyond interview-specific suggestions
+- Comprehensive customization of templates beyond MVP options
+
+## Technical Stack
+- **Frontend**: Next.js, TypeScript, TailwindCSS, shadcn/ui
+- **State Management**: Zustand
+- **Backend & Database**: Supabase with Drizzle ORM
+- **Key Dependencies**: Trigger.dev, PostMark, Stripe, OpenAI
+- **Hosting**: Vercel
+
+## Project Structure
+### Root Directories
+- `app/` - Next.js App Router directory containing all pages and routes
+- `components/` - Reusable React components
+- `lib/` - Utility functions and configurations
+- `public/` - Static assets
+- `supabase/` - Supabase configurations and types
+- `utils/` - Helper functions
+
+### App Directory Structure
+- `auth/` - Authentication related routes
+- `dashboard/` - Main application dashboard routes
+- `subscribe/` - Subscription management routes
+- `webhook/` - Webhook handlers for external services
+- `layout.tsx` - Root layout component
+- `page.tsx` - Homepage component
+
+### Components Directory
+- `ui/` - shadcn/ui components and custom UI elements
+- `auth/` - Authentication related components (LoginForm, SignupForm, etc.)
+- `dashboard/` - Dashboard specific components
+- `forms/` - Form components for various features
+
+### Key Configuration Files
+- `stripeSetup.ts` - Stripe payment integration configuration
+- `middleware.ts` - Next.js middleware for route protection
+- `drizzle.config.ts` - Drizzle ORM configuration
+- `tailwind.config.ts` - TailwindCSS configuration
+- `components.json` - shadcn/ui configuration
+
+## Features
+
+### 1. Dashboard Management
+**Description**: Manage interviews with clear status indicators and intuitive UI.
+- Card-based UI with color-coded status indicators
+- Buttons for actions like Edit, View, Archive, Delete
+- Mobile-friendly, with search and pagination features
+
+### 2. Cold Outreach
+**Description**: Automated cold outreach using Google search and NER for identifying interviewees.
+- Industry, role, location for query customization
+- Automatic Google search scraping with NER processing
+- Accept/Reject suggestions, and 'View Details' options
+
+### 3. Template Builder
+**Description**: Create and reuse interview question templates with AI-driven follow-up suggestions.
+- WYSIWYG editor with drag-and-drop functionality
+- AI-driven suggestions based on template description/type
+- Clean layout with collapsible sidebar for AI suggestions
+
+### 4. Interview Swap
+**Description**: Reciprocal interview feature to boost engagement among journalists.
+- Matching algorithm based on interests and audience size
+- Profile cards with 'Connect' or 'Skip' options
+
+### 5. Conducting Interviews
+**Description**: Interactive interview document with real-time AI-assisted suggestions.
+- Real-time editing with pop-up tooltips for AI suggestions
+- Completion status bar for interview process
+- Auto-suggest follow-up questions based on responses
+
+### 6. Draft Assistance
+**Description**: AI-generated drafts, summaries, and titles for completed interviews.
+- AI model generating drafts based on selected format
+- Notion-like WYSIWYG editor for smooth editing
+- Inline editing for title and summary with AI feedback
+
+### 7. Review & Finalization
+**Description**: Multi-step review and feedback process.
+- Commenting system for both journalists and interviewees
+- Color-coded indicators for 'Waiting for Review', 'Reviewed', 'Finalized'
+- Buttons for 'Request Review', 'Submit Feedback', and 'Finalize'
+
+### 8. Email Flow & Followups
+**Description**: Automated follow-up emails for reminders and interview progress.
+- Predefined templates with placeholders for personalization
+- Event-driven triggers for different stages of the interview
+- Toggle switches for enabling/disabling automatic emails
+
+## Development Guidelines
+
+### Coding Standards
+- **Styling**: TailwindCSS for utility-first design, dark mode theme with green accents
+- **State Management**: Zustand for simple state management
+- **Responsiveness**: Mobile-first approach
+- **Comments**: Clear and concise comments following project conventions
+
+### Development Setup
+- **Package Manager**: PNPM
+- **Node Version**: Managed via .nvmrc
+- **TypeScript**: Strict mode enabled
+- **Linting**: ESLint
+- **Styling**: TailwindCSS with PostCSS
+- **Database**: Supabase with Drizzle ORM
+
+### Team Alignment
+- Maintain consistency across team members using centralized UI/UX rules
+- Use Git with standardized commit messages
+- AI suggestions for common tasks to reduce manual editing time
+- Code autocompletion for commonly used functions and UI elements
