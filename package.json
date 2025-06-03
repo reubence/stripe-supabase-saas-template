@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx drizzle-kit migrate && next build",
+    "build": "drizzle-kit migrate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
@@ -13,7 +13,8 @@
     "db:studio": "drizzle-kit studio",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "stripe:setup": "ts-node stripeSetup.ts"
+    "stripe:setup": "tsx --env-file=.env stripeSetup.ts",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/webhook/stripe"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.1",
@@ -46,9 +47,10 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5",
     "prettier": "^3.2.0",
-    "prettier-plugin-tailwindcss": "^0.5.0"
+    "prettier-plugin-tailwindcss": "^0.5.0",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5"
   }
 }
