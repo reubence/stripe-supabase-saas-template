@@ -12,8 +12,8 @@ export default function StripePricingTable({ checkoutSessionSecret }: { checkout
 
     return (
         <stripe-pricing-table
-            pricing-table-id={process.env.STRIPE_PRICING_TABLE_ID}
-            publishable-key={process.env.STRIPE_PUBLISHABLE_KEY}
+            pricing-table-id={process.env.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID}
+            publishable-key={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
             customer-session-client-secret={checkoutSessionSecret}
         >
         </stripe-pricing-table>

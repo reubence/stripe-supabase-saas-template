@@ -6,9 +6,11 @@ import { createStripeCustomer } from '@/utils/stripe/api'
 import { db } from '@/utils/db/db'
 import { usersTable } from '@/utils/db/schema'
 import { eq } from 'drizzle-orm'
-const PUBLIC_URL = process.env.NEXT_PUBLIC_WEBSITE_URL ? process.env.NEXT_PUBLIC_WEBSITE_URL : "http://localhost:3000"
-export async function resetPassword(currentState: { message: string }, formData: FormData) {
 
+
+const PUBLIC_URL = process.env.NEXT_PUBLIC_WEBSITE_URL || "http://localhost:3000"
+
+export async function resetPassword(currentState: { message: string }, formData: FormData) {
     const supabase = createClient()
     const passwordData = {
         password: formData.get('password') as string,
@@ -23,7 +25,6 @@ export async function resetPassword(currentState: { message: string }, formData:
 
     let { error } = await supabase.auth.updateUser({
         password: passwordData.password
-
     })
     if (error) {
         return { message: error.message }
@@ -31,8 +32,8 @@ export async function resetPassword(currentState: { message: string }, formData:
     redirect(`/forgot-password/reset/success`)
 }
 
-export async function forgotPassword(currentState: { message: string }, formData: FormData) {
 
+export async function forgotPassword(currentState: { message: string }, formData: FormData) {
     const supabase = createClient()
     const email = formData.get('email') as string
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${PUBLIC_URL}/forgot-password/reset` })
@@ -41,8 +42,9 @@ export async function forgotPassword(currentState: { message: string }, formData
         return { message: error.message }
     }
     redirect(`/forgot-password/success`)
-
 }
+
+
 export async function signup(currentState: { message: string }, formData: FormData) {
     const supabase = createClient()
 
@@ -52,37 +54,37 @@ export async function signup(currentState: { message: string }, formData: FormDa
         name: formData.get('name') as string,
     }
 
-    try {
-        // Check if user exists in our database first
-        const existingDBUser = await db.select().from(usersTable).where(eq(usersTable.email, data.email))
-        
-        if (existingDBUser.length > 0) {
+    // Check if user exists in our database first
+    const existingDBUser = await db.select().from(usersTable).where(eq(usersTable.email, data.email))
+    
+    if (existingDBUser.length > 0) {
+        return { message: "An account with this email already exists. Please login instead." }
+    }
+
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+            emailRedirectTo: `${PUBLIC_URL}/auth/callback`,
+            data: {
+                email_confirm: process.env.NODE_ENV !== 'production',
+                full_name: data.name
+            }
+        }
+    })
+
+    if (signUpError) {
+        if (signUpError.message.includes("already registered")) {
             return { message: "An account with this email already exists. Please login instead." }
         }
+        return { message: signUpError.message }
+    }
 
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email: data.email,
-            password: data.password,
-            options: {
-                emailRedirectTo: `${PUBLIC_URL}/auth/callback`,
-                data: {
-                    email_confirm: process.env.NODE_ENV !== 'production',
-                    full_name: data.name
-                }
-            }
-        })
+    if (!signUpData?.user) {
+        return { message: "Failed to create user" }
+    }
 
-        if (signUpError) {
-            if (signUpError.message.includes("already registered")) {
-                return { message: "An account with this email already exists. Please login instead." }
-            }
-            return { message: signUpError.message }
-        }
-
-        if (!signUpData?.user) {
-            return { message: "Failed to create user" }
-        }
-
+    try {
         // create Stripe Customer Record using signup response data
         const stripeID = await createStripeCustomer(signUpData.user.id, signUpData.user.email!, data.name)
         
@@ -94,14 +96,15 @@ export async function signup(currentState: { message: string }, formData: FormDa
             stripe_id: stripeID, 
             plan: 'none' 
         })
-
-        revalidatePath('/', 'layout')
-        redirect('/subscribe')
-    } catch (error) {
-        console.error('Error in signup:', error)
+    } catch (err) {
+        console.error("Error in signup:", err instanceof Error ? err.message : "Unknown error")
         return { message: "Failed to setup user account" }
     }
+
+    revalidatePath("/", "layout")
+    redirect("/subscribe")
 }
+
 
 export async function loginUser(currentState: { message: string }, formData: FormData) {
     const supabase = createClient()
@@ -122,12 +125,12 @@ export async function loginUser(currentState: { message: string }, formData: For
 }
 
 
-
 export async function logout() {
     const supabase = createClient()
     const { error } = await supabase.auth.signOut()
     redirect('/login')
 }
+
 
 export async function signInWithGoogle() {
     const supabase = createClient()

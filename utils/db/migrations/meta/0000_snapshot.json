@@ -1,5 +1,5 @@
 {
-  "id": "780d08c2-0f25-4e86-a340-8772ac6d355f",
+  "id": "4424ab4b-cc61-4ab2-8f15-e0c96e5e79b5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -28,6 +28,12 @@
         },
         "plan": {
           "name": "plan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stripe_id": {
+          "name": "stripe_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
